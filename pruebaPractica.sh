@@ -1,31 +1,37 @@
+datos2>datos2
+datosTotal>datosTotal
 cat $1 | cut -d " " -f1 | sort | uniq >> datos2
+cat datos2
 
 while read nombre tiempo
 do
 	while read nombreC
 	do
-		if [ $nombre = $nombreC ] 
+		if [ $nombre = $nombreC ]
 		then
-			horas=`echo $1| cut -d ":" -f1`
-			minutos=`echo $1 | cut -d ":" -f2`
-			segundos=`echo $1 | cut -d ":" -f3`
+			horas=`echo $tiempo| cut -d ":" -f1`
+			minutos=`echo $tiempo| cut -d ":" -f2`
+			segundos=`echo $tiempo| cut -d ":" -f3`
 
-			while test $segundos -gt 59
+			while [ $segundos -ge 60 ]
 			do
-				minutos= `expr $minutos+1`
-				segundos= `expr $segundos-60`	
+				minutos=$(($minutos+1))
+				segundos=$(($segundos-60))
 			done
-			
-			while test $minutos -gt 59   
-                        do
-                                horas= `expr $horas+1`
-                                minutos= `expr $minutos-60`
+			while [ $minutos -ge 60 ]
+                       do
+                                horas=$(($horas+1))
+                                minutos=$(($minutos-60))
                         done
 
-			total= $nombre " = " $horas":"$minutos":"$segundos
-			echo $total			
+			total="$nombre $horas:$minutos:$segundos"
+
+			echo $total
 
 		fi
 	done < datos2
 done < $1
 
+#cat datosRep | sort | uniq >> datosTotal
+
+#cat datosTotal
